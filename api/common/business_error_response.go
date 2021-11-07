@@ -6,9 +6,10 @@ import (
 )
 
 var (
-	ErrInternalServer string = "500"
-	ErrDataConflict   string = "409"
-	ErrDataNotSpec    string = "400"
+	ErrInternalServer = "500"
+	ErrDataConflict   = "409"
+	ErrDataNotSpec    = "400"
+	ErrUnauthorized   = "401"
 )
 
 type BusinessErrorResponseSpec struct {
@@ -27,6 +28,8 @@ func NewBusinessErrorResponse(err error) (int, *BusinessErrorResponseSpec) {
 	case business.ErrDataNotSpec:
 		return errResponseDataNotSpec(err.Error())
 
+	case business.ErrUnauthorized:
+		return errResponseUnauthorized(err.Error())
 	}
 }
 
@@ -47,6 +50,13 @@ func errResponseDataConflict(message string) (int, *BusinessErrorResponseSpec) {
 func errResponseDataNotSpec(message string) (int, *BusinessErrorResponseSpec) {
 	return http.StatusBadRequest, &BusinessErrorResponseSpec{
 		Code:    ErrDataNotSpec,
+		Message: message,
+	}
+}
+
+func errResponseUnauthorized(message string) (int, *BusinessErrorResponseSpec) {
+	return http.StatusUnauthorized, &BusinessErrorResponseSpec{
+		Code:    ErrUnauthorized,
 		Message: message,
 	}
 }
