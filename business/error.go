@@ -3,7 +3,7 @@ package business
 import "errors"
 
 var (
-	ErrDataNotSpec = errors.New("data not spec")
+	ErrDataNotSpec = errors.New("Data Not Spec")
 
-	ErrDataConflig = errors.New("data conflig")
+	ErrDataConflict = errors.New("Data Conflict")
 )

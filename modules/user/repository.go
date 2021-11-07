@@ -50,7 +50,7 @@ func (r *Repository) AddNewUser(user *user.User) error {
 		if err != nil {
 			return err
 		}
-		return business.ErrDataConflig
+		return business.ErrDataConflict
 	}
 
 	return r.DB.Create(toUserInsert(user)).Error
