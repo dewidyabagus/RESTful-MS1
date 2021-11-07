@@ -2,6 +2,7 @@ package config
 
 import (
 	"log"
+	"sync"
 
 	"github.com/spf13/viper"
 )
@@ -14,6 +15,10 @@ type AppConfig struct {
 	PgPassword string `mapstructure:"pg_password"`
 	PgDbname   string `mapstructure:"pg_dbname"`
 	PgPort     int16  `mapstructure:"pg_port"`
+}
+
+type AppSecretKey struct {
+	JwtSecretKey string `mapstructure:"jwt_secret_key"`
 }
 
 func GetAppConfig() *AppConfig {
@@ -44,4 +49,28 @@ func GetAppConfig() *AppConfig {
 	}
 
 	return &finalConfig
+}
+
+func GetJWTSecretKey() string {
+	var mtx = &sync.Mutex{}
+
+	mtx.Lock()
+	defer mtx.Unlock()
+
+	var appSecret AppSecretKey
+
+	appSecret.JwtSecretKey = "default_example_config@example.com"
+
+	viper.SetConfigFile(".env")
+	err := viper.ReadInConfig()
+	if err != nil {
+		return appSecret.JwtSecretKey
+	}
+
+	err = viper.Unmarshal(&appSecret)
+	if err != nil {
+		return appSecret.JwtSecretKey
+	}
+
+	return appSecret.JwtSecretKey
 }
