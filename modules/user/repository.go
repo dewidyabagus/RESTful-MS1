@@ -21,6 +21,10 @@ type User struct {
 	DeletedAt time.Time `gorm:"deleted_at;type:timestamp"`
 }
 
+type UserLogin struct {
+	ID string `gorm:"id"`
+}
+
 func toUserInsert(u *user.User) *User {
 	return &User{
 		ID:        u.ID,
@@ -54,4 +58,18 @@ func (r *Repository) AddNewUser(user *user.User) error {
 	}
 
 	return r.DB.Create(toUserInsert(user)).Error
+}
+
+func (r *Repository) GetUserWithEmailPassword(email *string, password *string) (id *string, err error) {
+	var login = new(UserLogin)
+
+	err = r.DB.Model(&User{}).First(login, "email = ? and password = md5(?)", email, password).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return id, business.ErrUnauthorized
+		}
+		return id, err
+	}
+
+	return &login.ID, nil
 }

@@ -22,3 +22,7 @@ func (s *service) AddNewUser(user *UserAddSpec) error {
 
 	return s.repository.AddNewUser(user.toInsertUser())
 }
+
+func (s *service) GetUserWithEmailPassword(email *string, password *string) (id *string, err error) {
+	return s.repository.GetUserWithEmailPassword(email, password)
+}
