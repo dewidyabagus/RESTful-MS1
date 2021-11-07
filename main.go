@@ -15,6 +15,10 @@ import (
 	userService "RESTfulMS1/business/user"
 	userRepository "RESTfulMS1/modules/user"
 
+	// Auth
+	authController "RESTfulMS1/api/v1/auth"
+	authService "RESTfulMS1/business/auth"
+
 	"fmt"
 
 	echo "github.com/labstack/echo/v4"
@@ -54,11 +58,17 @@ func main() {
 	// Initiate user controller
 	userCtr := userController.NewController(userSvc)
 
+	// Initiate auth user
+	authSvc := authService.NewService(userSvc)
+
+	// Initiate auth controller
+	authCtr := authController.NewController(authSvc)
+
 	// Initiate echo web framework
 	e := echo.New()
 
 	// Initiate routes
-	api.RegisterRouters(e, userCtr)
+	api.RegisterRouters(e, userCtr, authCtr)
 
 	// start echo
 	e.Start(":8000")
