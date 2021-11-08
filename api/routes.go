@@ -1,6 +1,7 @@
 package api
 
 import (
+	"RESTfulMS1/api/middleware"
 	"RESTfulMS1/api/v1/auth"
 	"RESTfulMS1/api/v1/user"
 
@@ -13,7 +14,12 @@ func RegisterRouters(e *echo.Echo, user *user.Controller, auth *auth.Controller)
 		panic("Error Initiate Routes")
 	}
 
+	// Register and Login User
+	e.POST("/register", user.AddNewUser)
+	e.POST("/login", auth.LoginUserWithEmailPassword)
+
+	// User Information Changes
 	userGroup := e.Group("/v1/users")
-	userGroup.POST("/register", user.AddNewUser)
-	userGroup.POST("/login", auth.LoginUserWithEmailPassword)
+	userGroup.Use(middleware.JWTMiddleware())
+	userGroup.GET("", user.FindUserByUserId)
 }
