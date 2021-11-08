@@ -50,4 +50,5 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.1 // indirect
 	golang.org/x/net v0.0.0-20210913180222-943fd674d43e // indirect
+	golang.org/x/time v0.0.0-20201208040808-7e3f01d25324 // indirect
 )
