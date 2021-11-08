@@ -42,8 +42,8 @@ func createToken(id *string) (token string, err error) {
 	eJWT := jwt.NewWithClaims(
 		jwt.SigningMethodHS256,
 		jwt.MapClaims{
-			"access_uuid": *id,
-			"exp":         time.Now().Add(time.Minute * 60).Unix(),
+			"id":  *id,
+			"exp": time.Now().Add(time.Minute * 60).Unix(),
 		},
 	)
 
