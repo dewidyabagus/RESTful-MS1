@@ -21,6 +21,19 @@ type User struct {
 	DeletedAt time.Time `gorm:"deleted_at;type:timestamp"`
 }
 
+func (u *User) toBusinessUser() *user.User {
+	return &user.User{
+		ID:        u.ID,
+		Email:     u.Email,
+		FirstName: u.FirstName,
+		LastName:  u.LastName,
+		Role:      u.Role,
+		Password:  u.Password,
+		CreatedAt: u.CreatedAt,
+		UpdatedAt: u.UpdatedAt,
+	}
+}
+
 type UserLogin struct {
 	ID string `gorm:"id"`
 }
@@ -72,4 +85,14 @@ func (r *Repository) GetUserWithEmailPassword(email *string, password *string) (
 	}
 
 	return &login.ID, nil
+}
+
+func (r *Repository) FindUserByUserId(id *string) (*user.User, error) {
+	var user = new(User)
+
+	if err := r.DB.First(user, "id = ?", id).Error; err != nil {
+		return nil, err
+	}
+
+	return user.toBusinessUser(), nil
 }

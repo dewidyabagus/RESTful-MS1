@@ -2,7 +2,7 @@ package user
 
 type Service interface {
 	// Find user by user id
-	// FindUserByUserId(id *string) (*User, error)
+	FindUserByUserId(id *string) (*User, error)
 
 	// Get user with email and password. for user login
 	GetUserWithEmailPassword(email *string, password *string) (id *string, err error)
@@ -19,7 +19,7 @@ type Service interface {
 
 type Repository interface {
 	// Find user by user id
-	// FindUserByUserId(id *string) (*User, error)
+	FindUserByUserId(id *string) (*User, error)
 
 	// Get user with email and password. for user login
 	GetUserWithEmailPassword(email *string, password *string) (id *string, err error)

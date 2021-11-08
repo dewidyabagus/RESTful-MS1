@@ -26,3 +26,7 @@ func (s *service) AddNewUser(user *UserAddSpec) error {
 func (s *service) GetUserWithEmailPassword(email *string, password *string) (id *string, err error) {
 	return s.repository.GetUserWithEmailPassword(email, password)
 }
+
+func (s *service) FindUserByUserId(id *string) (*User, error) {
+	return s.repository.FindUserByUserId(id)
+}
