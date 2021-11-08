@@ -3,13 +3,17 @@ package common
 import (
 	"RESTfulMS1/business"
 	"net/http"
+
+	"gorm.io/gorm"
 )
 
 var (
+	ErrDataNotSpec  = "400"
+	ErrUnauthorized = "401"
+	ErrDataNotFound = "404"
+	ErrDataConflict = "409"
+
 	ErrInternalServer = "500"
-	ErrDataConflict   = "409"
-	ErrDataNotSpec    = "400"
-	ErrUnauthorized   = "401"
 )
 
 type BusinessErrorResponseSpec struct {
@@ -30,6 +34,10 @@ func NewBusinessErrorResponse(err error) (int, *BusinessErrorResponseSpec) {
 
 	case business.ErrUnauthorized:
 		return errResponseUnauthorized(err.Error())
+
+	case gorm.ErrRecordNotFound:
+		return errResponseDataNotFound()
+
 	}
 }
 
@@ -58,5 +66,12 @@ func errResponseUnauthorized(message string) (int, *BusinessErrorResponseSpec) {
 	return http.StatusUnauthorized, &BusinessErrorResponseSpec{
 		Code:    ErrUnauthorized,
 		Message: message,
+	}
+}
+
+func errResponseDataNotFound() (int, *BusinessErrorResponseSpec) {
+	return http.StatusNotFound, &BusinessErrorResponseSpec{
+		Code:    ErrDataNotFound,
+		Message: "Data Not Found",
 	}
 }
